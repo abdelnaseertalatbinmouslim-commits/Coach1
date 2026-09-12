@@ -1,0 +1,22 @@
+{
+  "name": "coach-platform",
+  "version": "1.0.0",
+  "description": "منصة الكوتش - منصة تعليمية ورياضية عربية احترافية",
+  "main": "api/server.js",
+  "scripts": {
+    "start": "node api/server.js",
+    "dev": "node api/server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "firebase-admin": "^12.1.0",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "node-fetch": "^3.3.2"
+  },
+  "engines": {
+    "node": "18.x"
+  },
+  "private": true
+}
