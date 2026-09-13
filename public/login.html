@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تسجيل الدخول | منصة الكوتش</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header>
+    <div class="logo-container">
+      <img src="assets/1783950091830.jpg" alt="شعار منصة الكوتش" onerror="this.src='https://via.placeholder.com/40'">
+      <span class="logo-text">منصة الكوتش</span>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">الرئيسية</a></li>
+        <li><a href="login.html" class="active">تسجيل الدخول</a></li>
+        <li><a href="register.html">حساب جديد</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 3rem 1rem;">
+    <div class="card" style="width: 100%; max-width: 420px;">
+      <h2 style="color: var(--gold-primary); text-align: center; margin-bottom: 1.5rem; font-size: 1.75rem;">تسجيل الدخول</h2>
+      
+      <div id="alertMessage" style="display: none; padding: 0.75rem; border-radius: 6px; margin-bottom: 1rem; text-align: center; font-weight: 600;"></div>
+
+      <form id="loginForm">
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">رقم الهاتف</label>
+          <input type="tel" id="phone" required placeholder="010xxxxxxxx" style="width: 100%; padding: 0.75rem; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main);">
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">كلمة المرور / PIN</label>
+          <input type="password" id="pin" required style="width: 100%; padding: 0.75rem; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main);">
+        </div>
+
+        <button type="submit" class="btn-gold" style="width: 100%;">دخول المنصة</button>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <p>جميع الحقوق محفوظة © منصة الكوتش</p>
+  </footer>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const phone = document.getElementById('phone').value;
+      const pin = document.getElementById('pin').value;
+      const alertBox = document.getElementById('alertMessage');
+
+      try {
+        const response = await fetch('/api/student-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, pin })
+        });
+        const data = await response.json();
+
+        alertBox.style.display = 'block';
+        if (data.success) {
+          alertBox.style.background = 'rgba(83, 216, 154, 0.1)';
+          alertBox.style.color = 'var(--success)';
+          alertBox.style.border = '1px solid var(--success)';
+          alertBox.textContent = 'تم تسجيل الدخول بنجاح! جاري تحويلك لوحة التحكم...';
+          setTimeout(() => { window.location.href = 'student.html'; }, 1000);
+        } else {
+          alertBox.style.background = 'rgba(255, 111, 125, 0.1)';
+          alertBox.style.color = 'var(--danger)';
+          alertBox.style.border = '1px solid var(--danger)';
+          alertBox.textContent = data.message;
+        }
+      } catch (err) {
+        alertBox.style.display = 'block';
+        alertBox.style.background = 'rgba(255, 111, 125, 0.1)';
+        alertBox.style.color = 'var(--danger)';
+        alertBox.textContent = 'حدث خطأ في الاتصال بالخادم';
+      }
+    });
+  </script>
+</body>
+</html>
