@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة تحكم الطالب | منصة الكوتش</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body style="display: flex; flex-direction: row; min-height: 100vh;">
+
+  <!-- Sidebar للكمبيوتر -->
+  <aside style="width: 260px; background-color: var(--bg-card); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 1.5rem;">
+    <div class="logo-container" style="margin-bottom: 2rem;">
+      <img src="assets/1783950091830.jpg" alt="شعار منصة الكوتش" onerror="this.src='https://via.placeholder.com/40'">
+      <span class="logo-text">منصة الكوتش</span>
+    </div>
+    
+    <ul style="list-style: none; display: flex; flex-direction: column; gap: 1rem;">
+      <li><a href="student.html" class="btn-outline" style="text-align: right; border: none; color: var(--gold-primary);">🏠 الرئيسية</a></li>
+      <li><a href="courses.html" class="btn-outline" style="text-align: right; border: none; color: var(--text-muted);">📚 الكورسات</a></li>
+      <li><a href="videos.html" class="btn-outline" style="text-align: right; border: none; color: var(--text-muted);">🎥 الفيديوهات</a></li>
+      <li><a href="files.html" class="btn-outline" style="text-align: right; border: none; color: var(--text-muted);">📁 الملفات</a></li>
+      <li><a href="quizzes.html" class="btn-outline" style="text-align: right; border: none; color: var(--text-muted);">📝 الاختبارات</a></li>
+      <li><a href="results.html" class="btn-outline" style="text-align: right; border: none; color: var(--text-muted);">📊 النتائج</a></li>
+      <li><a href="support.html" class="btn-outline" style="text-align: right; border: none; color: var(--text-muted);">🛠️ الدعم الفني</a></li>
+    </ul>
+
+    <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+      <button onclick="logout()" class="btn-outline" style="width: 100%; color: var(--danger); border-color: var(--danger);">تسجيل الخروج</button>
+    </div>
+  </aside>
+
+  <!-- محتوى لوحة التحكم -->
+  <main style="flex: 1; padding: 2rem; overflow-y: auto;">
+    <header style="background: transparent; border: none; padding: 0; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h1 style="color: var(--gold-primary); font-size: 1.75rem;">أهلاً بك يا بطل</h1>
+        <p style="color: var(--text-muted);">مرحباً بك في لوحة تحكم الطالب الخاصة بك على منصة الكوتش.</p>
+      </div>
+    </header>
+
+    <!-- إحصائيات سريعة -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+      <div class="card">
+        <h3 style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.5rem;">الكورسات المسجلة</h3>
+        <p style="font-size: 2rem; font-weight: 700; color: var(--gold-primary);">0</p>
+      </div>
+      <div class="card">
+        <h3 style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.5rem;">الاختبارات المكتملة</h3>
+        <p style="font-size: 2rem; font-weight: 700; color: var(--gold-primary);">0</p>
+      </div>
+      <div class="card">
+        <h3 style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.5rem;">الملفات والمذكرات</h3>
+        <p style="font-size: 2rem; font-weight: 700; color: var(--gold-primary);">0</p>
+      </div>
+    </div>
+
+    <!-- قسم المتابعة -->
+    <div class="card">
+      <h2 style="color: var(--gold-primary); margin-bottom: 1rem; font-size: 1.25rem;">متابعة التعلم</h2>
+      <p style="color: var(--text-muted);">لا توجد دروس حالية قيد المتابعة. تصفح الكورسات المتاحة وابدأ رحلتك الآن!</p>
+      <a href="courses.html" class="btn-gold" style="margin-top: 1.5rem; display: inline-block;">تصفح الكورسات</a>
+    </div>
+  </main>
+
+  <script>
+    function logout() {
+      document.cookie = 'student_session=; Max-Age=0; path=/;';
+      window.location.href = 'login.html';
+    }
+  </script>
+</body>
+</html>
