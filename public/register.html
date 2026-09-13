@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حساب جديد | منصة الكوتش</title>
+  <link rel="stylesheet" href="css/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header>
+    <div class="logo-container">
+      <img src="assets/1783950091830.jpg" alt="شعار منصة الكوتش" onerror="this.src='https://via.placeholder.com/40'">
+      <span class="logo-text">منصة الكوتش</span>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">الرئيسية</a></li>
+        <li><a href="login.html">تسجيل الدخول</a></li>
+        <li><a href="register.html" class="active">حساب جديد</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 3rem 1rem;">
+    <div class="card" style="width: 100%; max-width: 450px;">
+      <h2 style="color: var(--gold-primary); text-align: center; margin-bottom: 1.5rem; font-size: 1.75rem;">إنشاء حساب جديد</h2>
+      
+      <div id="alertMessage" style="display: none; padding: 0.75rem; border-radius: 6px; margin-bottom: 1rem; text-align: center; font-weight: 600;"></div>
+
+      <form id="registerForm">
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">الاسم الكامل</label>
+          <input type="text" id="name" required style="width: 100%; padding: 0.75rem; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main);">
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">رقم الهاتف (أساسي للدخول)</label>
+          <input type="tel" id="phone" required placeholder="010xxxxxxxx" style="width: 100%; padding: 0.75rem; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main);">
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">كلمة المرور / PIN</label>
+          <input type="password" id="pin" required style="width: 100%; padding: 0.75rem; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main);">
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">الصف الدراسي</label>
+          <select id="grade" required style="width: 100%; padding: 0.75rem; background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-main);">
+            <option value="">اختر الصف الدراسي</option>
+            <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
+            <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
+            <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
+            <option value="كلية علوم الرياضة">كلية علوم الرياضة</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-gold" style="width: 100%;">تسجيل الحساب</button>
+      </form>
+
+      <div id="whatsappPrompt" style="display: none; margin-top: 1.5rem; text-align: center; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+        <p style="color: var(--gold-light); margin-bottom: 1rem; font-size: 0.95rem;">شرط أساسي للانضمام: اشترك في قناة المنصة على الواتساب</p>
+        <a href="https://whatsapp.com/channel/0029VbDGX1rJpe8ZM6H5h02T" target="_blank" class="btn-outline" style="width: 100%; display: block;">الاشتراك في قناة الواتساب</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>جميع الحقوق محفوظة © منصة الكوتش</p>
+  </footer>
+
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const phone = document.getElementById('phone').value;
+      const pin = document.getElementById('pin').value;
+      const grade = document.getElementById('grade').value;
+      const alertBox = document.getElementById('alertMessage');
+
+      try {
+        const response = await fetch('/api/student-register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, phone, pin, grade })
+        });
+        const data = await response.json();
+
+        alertBox.style.display = 'block';
+        if (data.success) {
+          alertBox.style.background = 'rgba(83, 216, 154, 0.1)';
+          alertBox.style.color = 'var(--success)';
+          alertBox.style.border = '1px solid var(--success)';
+          alertBox.textContent = data.message + ' - بانتظار موافقة الأدمن';
+          document.getElementById('registerForm').style.display = 'none';
+          document.getElementById('whatsappPrompt').style.display = 'block';
+        } else {
+          alertBox.style.background = 'rgba(255, 111, 125, 0.1)';
+          alertBox.style.color = 'var(--danger)';
+          alertBox.style.border = '1px solid var(--danger)';
+          alertBox.textContent = data.message;
+        }
+      } catch (err) {
+        alertBox.style.display = 'block';
+        alertBox.style.background = 'rgba(255, 111, 125, 0.1)';
+        alertBox.style.color = 'var(--danger)';
+        alertBox.textContent = 'حدث خطأ في الاتصال بالخادم';
+      }
+    });
+  </script>
+</body>
+</html>
