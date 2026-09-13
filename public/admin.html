@@ -3,72 +3,148 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>لوحة تحكم الطالب | منصة الكوتش</title>
+  <title>لوحة التحكم الشاملة | منصة الكوتش</title>
   <link rel="stylesheet" href="css/main.css">
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    .admin-section { display: none; }
+    .admin-section.active { display: block; }
+    .nav-btn { width: 100%; text-align: right; border: none; background: transparent; cursor: pointer; padding: 0.75rem 1rem; border-radius: 8px; color: var(--text-muted); font-weight: 600; transition: all 0.3s; }
+    .nav-btn:hover, .nav-btn.active { background: rgba(217, 180, 90, 0.1); color: var(--gold-primary); }
+  </style>
 </head>
 <body style="display: flex; flex-direction: row; min-height: 100vh;">
 
-  <!-- Sidebar للكمبيوتر -->
+  <!-- Sidebar المدمج -->
   <aside style="width: 260px; background-color: var(--bg-card); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; padding: 1.5rem;">
     <div class="logo-container" style="margin-bottom: 2rem;">
       <img src="assets/1783950091830.jpg" alt="شعار منصة الكوتش" onerror="this.src='https://via.placeholder.com/40'">
-      <span class="logo-text">منصة الكوتش</span>
+      <span class="logo-text">إدارة الكوتش</span>
     </div>
     
-    <ul style="list-style: none; display: flex; flex-direction: column; gap: 1rem;">
-      <li><a href="student.html" class="btn-outline" style="text-align: right; border: none; color: var(--gold-primary);">🏠 الرئيسية</a></li>
-      <li><a href="courses.html" class="btn-outline" style="text-align: right; border: none; color: var(--text-muted);">📚 الكورسات</a></li>
-      <li><a href="videos.html" class="btn-outline" style="text-align: right; border: none; color: var(--text-muted);">🎥 الفيديوهات</a></li>
-      <li><a href="files.html" class="btn-outline" style="text-align: right; border: none; color: var(--text-muted);">📁 الملفات</a></li>
-      <li><a href="quizzes.html" class="btn-outline" style="text-align: right; border: none; color: var(--text-muted);">📝 الاختبارات</a></li>
-      <li><a href="results.html" class="btn-outline" style="text-align: right; border: none; color: var(--text-muted);">📊 النتائج</a></li>
-      <li><a href="support.html" class="btn-outline" style="text-align: right; border: none; color: var(--text-muted);">🛠️ الدعم الفني</a></li>
-    </ul>
+    <div style="display: flex; flex-direction: column; gap: 0.5rem;" id="adminNav">
+      <button class="nav-btn active" onclick="switchTab('overview')">📊 نظرة عامة</button>
+      
+      <!-- خاصة بالأدمن الرئيسي فقط -->
+      <div class="owner-only" style="font-size: 0.75rem; color: var(--gold-dark); margin-top: 1rem; margin-bottom: 0.25rem;">صلاحيات الأدمن الرئيسي</div>
+      <button class="nav-btn owner-only" onclick="switchTab('students')">👥 إدارة الطلاب والقبول</button>
+      <button class="nav-btn owner-only" onclick="switchTab('admins')">🛡️ إدارة الأدمن والأذونات</button>
+
+      <!-- مشتركة / للرفع (للأدمن الرئيسي والفرعي) -->
+      <div style="font-size: 0.75rem; color: var(--gold-dark); margin-top: 1rem; margin-bottom: 0.25rem;">إدارة المحتوى والرفع</div>
+      <button class="nav-btn" onclick="switchTab('courses')">📚 الكورسات والدروس</button>
+      <button class="nav-btn" onclick="switchTab('media')">🎥 الفيديوهات والملفات</button>
+      <button class="nav-btn" onclick="switchTab('quizzes')">📝 بناء الاختبارات والنتائج</button>
+      <button class="nav-btn" onclick="switchTab('support')">🛠️ الدعم الفني</button>
+    </div>
 
     <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-color);">
-      <button onclick="logout()" class="btn-outline" style="width: 100%; color: var(--danger); border-color: var(--danger);">تسجيل الخروج</button>
+      <button onclick="adminLogout()" class="btn-outline" style="width: 100%; color: var(--danger); border-color: var(--danger);">تسجيل خروج الأدمن</button>
     </div>
   </aside>
 
-  <!-- محتوى لوحة التحكم -->
+  <!-- المحتوى الرئيسي المقسم لتبويبات -->
   <main style="flex: 1; padding: 2rem; overflow-y: auto;">
-    <header style="background: transparent; border: none; padding: 0; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
-      <div>
-        <h1 style="color: var(--gold-primary); font-size: 1.75rem;">أهلاً بك يا بطل</h1>
-        <p style="color: var(--text-muted);">مرحباً بك في لوحة تحكم الطالب الخاصة بك على منصة الكوتش.</p>
+    
+    <!-- 1. نظرة عامة -->
+    <section id="overview" class="admin-section active">
+      <h1 style="color: var(--gold-primary); font-size: 1.75rem; margin-bottom: 0.5rem;">نظرة عامة على النظام</h1>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">مرحباً بك في لوحة تحكم منصة الكوتش المدمجة.</p>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem;">
+        <div class="card">
+          <h3 style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.5rem;">إجمالي الطلاب</h3>
+          <p style="font-size: 2rem; font-weight: 700; color: var(--gold-primary);">0</p>
+        </div>
+        <div class="card">
+          <h3 style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.5rem;">طلبات الانتظار (Pending)</h3>
+          <p style="font-size: 2rem; font-weight: 700; color: var(--warning, #e9bb58);">0</p>
+        </div>
+        <div class="card">
+          <h3 style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.5rem;">الكورسات الفعالة</h3>
+          <p style="font-size: 2rem; font-weight: 700; color: var(--gold-primary);">0</p>
+        </div>
       </div>
-    </header>
+    </section>
 
-    <!-- إحصائيات سريعة -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+    <!-- 2. إدارة الطلاب (رئيسي فقط) -->
+    <section id="students" class="admin-section owner-only">
+      <h1 style="color: var(--gold-primary); font-size: 1.75rem; margin-bottom: 0.5rem;">إدارة الطلاب والقبول</h1>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">مراجعة وقبول الطلاب الجدد المسجلين برقم الهاتف.</p>
       <div class="card">
-        <h3 style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.5rem;">الكورسات المسجلة</h3>
-        <p style="font-size: 2rem; font-weight: 700; color: var(--gold-primary);">0</p>
+        <p style="color: var(--text-muted);">لا توجد طلبات معلقة حالياً.</p>
       </div>
-      <div class="card">
-        <h3 style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.5rem;">الاختبارات المكتملة</h3>
-        <p style="font-size: 2rem; font-weight: 700; color: var(--gold-primary);">0</p>
-      </div>
-      <div class="card">
-        <h3 style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.5rem;">الملفات والمذكرات</h3>
-        <p style="font-size: 2rem; font-weight: 700; color: var(--gold-primary);">0</p>
-      </div>
-    </div>
+    </section>
 
-    <!-- قسم المتابعة -->
-    <div class="card">
-      <h2 style="color: var(--gold-primary); margin-bottom: 1rem; font-size: 1.25rem;">متابعة التعلم</h2>
-      <p style="color: var(--text-muted);">لا توجد دروس حالية قيد المتابعة. تصفح الكورسات المتاحة وابدأ رحلتك الآن!</p>
-      <a href="courses.html" class="btn-gold" style="margin-top: 1.5rem; display: inline-block;">تصفح الكورسات</a>
-    </div>
+    <!-- 3. إدارة الأدمن (رئيسي فقط) -->
+    <section id="admins" class="admin-section owner-only">
+      <h1 style="color: var(--gold-primary); font-size: 1.75rem; margin-bottom: 0.5rem;">إدارة حسابات الأدمن</h1>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">التحكم في صلاحيات الأدمن الرئيسي والفرعي.</p>
+      <div class="card">
+        <p style="color: var(--text-muted);">تحكم في صلاحيات الرفع والكورسات للأدمن الفرعي.</p>
+      </div>
+    </section>
+
+    <!-- 4. الكورسات (للجميع / الرفع) -->
+    <section id="courses" class="admin-section">
+      <h1 style="color: var(--gold-primary); font-size: 1.75rem; margin-bottom: 0.5rem;">إدارة الكورسات والدروس</h1>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">إنشاء ورفع وتعديل الكورسات.</p>
+      <div class="card">
+        <button class="btn-gold" style="margin-bottom: 1rem;">+ إضافة كورس جديد</button>
+        <p style="color: var(--text-muted);">قائمة الكورسات الحالية ستظهر هنا.</p>
+      </div>
+    </section>
+
+    <!-- 5. الفيديوهات والملفات (للجميع / الرفع) -->
+    <section id="media" class="admin-section">
+      <h1 style="color: var(--gold-primary); font-size: 1.75rem; margin-bottom: 0.5rem;">إدارة الفيديوهات والملفات</h1>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">رفع المذكرات وملفات الـ PDF والفيديوهات التعليمية.</p>
+      <div class="card">
+        <button class="btn-gold" style="margin-bottom: 1rem;">+ رفع ملف أو فيديو جديد</button>
+        <p style="color: var(--text-muted);">لا توجد ملفات مرفوعة حتى الآن.</p>
+      </div>
+    </section>
+
+    <!-- 6. الاختبارات والنتائج (للجميع / الرفع) -->
+    <section id="quizzes" class="admin-section">
+      <h1 style="color: var(--gold-primary); font-size: 1.75rem; margin-bottom: 0.5rem;">بناء الاختبارات والنتائج</h1>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">إنشاء اختبارات جديدة وتتبع نتائج الطلاب.</p>
+      <div class="card">
+        <button class="btn-gold" style="margin-bottom: 1rem;">+ إنشاء اختبار جديد</button>
+        <p style="color: var(--text-muted);">لا توجد اختبارات متاحة.</p>
+      </div>
+    </section>
+
+    <!-- 7. الدعم الفني -->
+    <section id="support" class="admin-section">
+      <h1 style="color: var(--gold-primary); font-size: 1.75rem; margin-bottom: 0.5rem;">الدعم الفني والرسائل</h1>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">الرد على استفسارات وتذاكر الطلاب.</p>
+      <div class="card">
+        <p style="color: var(--text-muted);">لا توجد تذاكر دعم مفتوحة حالياً.</p>
+      </div>
+    </section>
+
   </main>
 
   <script>
-    function logout() {
-      document.cookie = 'student_session=; Max-Age=0; path=/;';
-      window.location.href = 'login.html';
+    function switchTab(tabId) {
+      document.querySelectorAll('.admin-section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+      
+      document.getElementById(tabId).classList.add('active');
+      event.currentTarget.classList.add('active');
     }
+
+    function adminLogout() {
+      document.cookie = 'admin_session=; Max-Age=0; path=/;';
+      window.location.href = 'admin-login.html';
+    }
+
+    // مثال افتراضي للتحقق من نوع الأدمن (لو فرعي يتم إخفاء عناصر الـ owner-only)
+    // const adminRole = "content_admin"; // أو "owner"
+    // if(adminRole === "content_admin") {
+    //   document.querySelectorAll('.owner-only').forEach(el => el.style.display = 'none');
+    // }
   </script>
 </body>
 </html>
